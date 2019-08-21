@@ -49,6 +49,10 @@ public class TodoAppRepo {
 		
 		for(HashMap.Entry<Integer, Todo> entry : todo.entrySet()) {
 		    if(entry.getKey()==id) {
+		    	//overriding the item's id - 
+		    	//in case the item contains id value different from URL id value
+		    	//Or in case the id value is null
+		    	todoItem.setId(entry.getKey());
 		    	todo.replace(entry.getKey(), todoItem);
 		    	return todo.get(entry.getKey());
 		    }

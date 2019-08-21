@@ -1,13 +1,8 @@
 package com.todo.rest.services.todoapp.web;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
@@ -26,15 +21,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.todo.rest.services.todoapp.domain.ItemStatus;
 import com.todo.rest.services.todoapp.domain.Todo;
-import com.todo.rest.services.todoapp.repo.TodoAppRepo;
 import com.todo.rest.services.todoapp.service.TodoService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = TodoAppController.class, secure = false)
 public class TestTodoAppController {
 
-	private static final int CREATED_TODO_ID = 4;
-	private static final int UPDATED_TODO_ID = 4;
+	private static final int CREATED_TODO_ID = 4;	
 	
 	@Autowired
 	private MockMvc mvc;
@@ -89,9 +82,8 @@ public class TestTodoAppController {
 	@Test
 	public void retrieveTodo_error() throws Exception {
 		when(todoService.getTodoItem(anyInt())).thenReturn(null);
-		MvcResult result = mvc
-				.perform(MockMvcRequestBuilders.get("/app/api/todo/11").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound()).andReturn(); 
+		mvc.perform(MockMvcRequestBuilders.get("/app/api/todo/11").accept(MediaType.APPLICATION_JSON))
+		   .andExpect(status().isNotFound()).andReturn(); 
 	}
 
 	@Test
@@ -122,9 +114,8 @@ public class TestTodoAppController {
 				"	        \"status\": \"DONE\"\r\n" + 
 				"	    }";
 
-		MvcResult result = mvc.perform(
-				MockMvcRequestBuilders.post("/app/api/add").content(todo).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().is4xxClientError()).andReturn();
+		mvc.perform(MockMvcRequestBuilders.post("/app/api/add").content(todo).contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError()).andReturn();
 	}
 
 	@Test
