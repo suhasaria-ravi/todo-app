@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.todo.rest.services.todoapp.domain.Todo;
+import com.todo.rest.services.todoapp.error.TodoNotFoundException;
 import com.todo.rest.services.todoapp.service.TodoService;
 
 @RestController
@@ -30,19 +31,31 @@ public class TodoAppController {
 	}
 	
 	@GetMapping(value = "/todo/{id}")
-	public  ResponseEntity<Todo> getTodo(@PathVariable int id) {	
-		return new ResponseEntity<>(todoService.getTodoItem(id), HttpStatus.OK);
+	public  ResponseEntity<Todo> getTodo(@PathVariable int id) {			
+		Todo todoItem = todoService.getTodoItem(id);
+		if(todoItem !=null) {
+			return new ResponseEntity<>(todoItem, HttpStatus.OK);
+		}
+		else
+		{
+			throw new TodoNotFoundException("Todo item with id="+id+" not found"); 
+		}
 	}
 	
 	@PostMapping(value = "/add")
 	public  ResponseEntity<Todo> addTodo(@RequestBody @Valid Todo todo) {
+		
 		return new ResponseEntity<>(todoService.saveTodo(todo), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(value = "/delete/{id}")
-	public  ResponseEntity<Todo> deleteTodo(@PathVariable int id) {	
-		todoService.deleteItem(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public  ResponseEntity<Object> deleteTodo(@PathVariable int id) {	
+		if(todoService.deleteItem(id)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		else {
+			throw new TodoNotFoundException("Todo item with id="+id+" not found"); 
+		}
 	}
 	
 }

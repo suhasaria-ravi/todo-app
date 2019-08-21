@@ -11,7 +11,7 @@ public class Todo {
 	@NotNull @NotBlank
 	private String name;
 	
-	@Size(max=500)
+	@Size(max=500, message = "Description can be max 500 Chars")
 	private String description;
 	
 	private String dueDate;

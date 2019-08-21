@@ -11,7 +11,7 @@ import com.todo.rest.services.todoapp.repo.TodoAppRepo;
 @Service
 public class TodoService {	
 	
-	private TodoAppRepo todoAppRepo;
+	private TodoAppRepo todoAppRepo; 
 	
 	@Autowired
 	public TodoService(TodoAppRepo todoAppRepo) {
@@ -32,9 +32,10 @@ public class TodoService {
         return todoItem;
     }
     
-    public void deleteItem(int id) {
+    public Boolean deleteItem(int id) {
 		Boolean itemDeletedInd = todoAppRepo.deleteTodoItem(id);	
-    	if(!itemDeletedInd) throw new TodoNotFoundException("Todo item with id="+id+" not found");        
+    	if(!itemDeletedInd) throw new TodoNotFoundException("Todo item with id="+id+" not found"); 
+    	return itemDeletedInd;
     }
 		
 	
