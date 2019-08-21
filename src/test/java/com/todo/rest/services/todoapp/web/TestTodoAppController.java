@@ -127,18 +127,24 @@ public class TestTodoAppController {
 				.andExpect(status().is4xxClientError()).andReturn();
 	}
 
-	/*@Test
+	@Test
 	public void updateTodo() throws Exception {
-		Todo mockTodo = new Todo(UPDATED_TODO_ID, "Jack", "Learn Spring MVC 5", new Date(), false);
-		String todo = "{\"user\":\"Jack\",\"desc\":\"Learn Spring MVC 5\",\"done\":false}";
+		Todo mockTodo = new Todo(1, "NameMock4", "DescMock4", "DateMock4", ItemStatus.PENDING);
+		String todo =  "{\r\n" + 
+				"	        \"id\": 1,\r\n" + 
+				"	        \"name\": \"NameMock4\",\r\n" + 
+				"	        \"description\": \"DescMock4\",\r\n" + 
+				"	        \"dueDate\": \"DateMock4\",\r\n" + 
+				"	        \"status\": \"PENDING\"\r\n" + 
+				"	    }";
 
-		when(service.update(mockTodo)).thenReturn(mockTodo);
+		when(todoService.updateTodoItem(anyInt(),any())).thenReturn(mockTodo);
 
-		MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/users/Jack/todos/" + UPDATED_TODO_ID).content(todo)
+		MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/app/api/todo/update/" + mockTodo.getId()).content(todo)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
 
 		JSONAssert.assertEquals(todo, result.getResponse().getContentAsString(), false);
-	}*/
+	}
 
 	@Test
 	public void deleteTodo() throws Exception {

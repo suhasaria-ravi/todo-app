@@ -32,6 +32,13 @@ public class TodoService {
         return todoItem;
     }
     
+    public  Todo updateTodoItem(int id,Todo todo) {
+		Todo todoItem = todoAppRepo.updateTodoItem(id, todo);	
+    	if(todoItem==null) throw new TodoNotFoundException("Todo item with id="+id+" not found");
+    	
+        return todoItem;
+    }
+    
     public Boolean deleteItem(int id) {
 		Boolean itemDeletedInd = todoAppRepo.deleteTodoItem(id);	
     	if(!itemDeletedInd) throw new TodoNotFoundException("Todo item with id="+id+" not found"); 

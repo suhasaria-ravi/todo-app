@@ -45,6 +45,17 @@ public class TodoAppRepo {
 		return null;
 	}
 	
+	public Todo updateTodoItem(int id,Todo todoItem) {
+		
+		for(HashMap.Entry<Integer, Todo> entry : todo.entrySet()) {
+		    if(entry.getKey()==id) {
+		    	todo.replace(entry.getKey(), todoItem);
+		    	return todo.get(entry.getKey());
+		    }
+		}
+		return null;
+	}
+	
 	public Boolean deleteTodoItem(int id) {
 		
 		for(HashMap.Entry<Integer, Todo> entry : todo.entrySet()) {
