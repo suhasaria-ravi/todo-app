@@ -1,8 +1,12 @@
 package com.todo.rest.services.todoapp.domain;
 
+import java.time.LocalDate;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Todo {
 		 
@@ -14,11 +18,13 @@ public class Todo {
 	@Size(max=500, message = "Description can be max 500 Chars")
 	private String description;
 	
-	private String dueDate;
+
+    @JsonFormat(pattern="yyyy-MM-dd")
+	private LocalDate dueDate;
 	
 	private ItemStatus status;
 
-	public Todo(int id,String name, String description, String dueDate, ItemStatus status) {
+	public Todo(int id,String name, String description, LocalDate dueDate, ItemStatus status) {
 		this.id=id;
 		this.name = name;
 		this.description = description;
@@ -42,7 +48,7 @@ public class Todo {
 		return description;
 	}
 
-	public String getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
 
@@ -58,7 +64,7 @@ public class Todo {
 		this.description = description;
 	}
 
-	public void setDueDate(String dueDate) {
+	public void setDueDate(LocalDate dueDate) {
 		this.dueDate = dueDate;
 	}
 

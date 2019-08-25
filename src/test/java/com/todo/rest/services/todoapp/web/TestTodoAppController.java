@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,8 +38,8 @@ public class TestTodoAppController {
 
 	@Test
 	public void retrieveTodos() throws Exception { 
-		List<Todo> mockList = Arrays.asList(new Todo(1, "NameMock1", "DescriptionMock1", "DueDateMock1", ItemStatus.PENDING),
-											new Todo(2, "NameMock2", "DescriptionMock2", "DueDateMock2", ItemStatus.DONE));
+		List<Todo> mockList = Arrays.asList(new Todo(1, "NameMock1", "DescriptionMock1", LocalDate.now(), ItemStatus.PENDING),
+											new Todo(2, "NameMock2", "DescriptionMock2", LocalDate.now(), ItemStatus.DONE));
 
 		when(todoService.getAllTodo()).thenReturn(mockList);
 
@@ -48,14 +49,14 @@ public class TestTodoAppController {
 				"	        \"id\": 1,\r\n" + 
 				"	        \"name\": \"NameMock1\",\r\n" + 
 				"	        \"description\": \"DescriptionMock1\",\r\n" + 
-				"	        \"dueDate\": \"DueDateMock1\",\r\n" + 
+				"	        \"dueDate\": "+LocalDate.now()+",\r\n" + 
 				"	        \"status\": \"PENDING\"\r\n" + 
 				"	    },\r\n" + 
 				"	    {\r\n" + 
 				"	        \"id\": 2,\r\n" + 
 				"	        \"name\": \"NameMock2\",\r\n" + 
 				"	        \"description\": \"DescriptionMock2\",\r\n" + 
-				"	        \"dueDate\": \"DueDateMock2\",\r\n" + 
+				"	        \"dueDate\": "+LocalDate.now()+",\r\n" + 
 				"	        \"status\": \"DONE\"\r\n" + 
 				"	    }"   + "]";
 		
@@ -64,7 +65,7 @@ public class TestTodoAppController {
 	
 	@Test
 	public void retrieveTodo() throws Exception {
-		Todo mockTodo = new Todo(1, "NameMock1", "DescriptionMock1", "DueDateMock1", ItemStatus.PENDING);
+		Todo mockTodo = new Todo(1, "NameMock1", "DescriptionMock1", LocalDate.now(), ItemStatus.PENDING);
 		when(todoService.getTodoItem(anyInt())).thenReturn(mockTodo);
 		MvcResult result = mvc
 				.perform(MockMvcRequestBuilders.get("/app/api/todo/1").accept(MediaType.APPLICATION_JSON))
@@ -73,7 +74,7 @@ public class TestTodoAppController {
 				"	        \"id\": 1,\r\n" + 
 				"	        \"name\": \"NameMock1\",\r\n" + 
 				"	        \"description\": \"DescriptionMock1\",\r\n" + 
-				"	        \"dueDate\": \"DueDateMock1\",\r\n" + 
+				"	        \"dueDate\": "+LocalDate.now()+",\r\n" + 
 				"	        \"status\": \"PENDING\"\r\n" + 
 				"	    }";
 		JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
@@ -88,12 +89,12 @@ public class TestTodoAppController {
 
 	@Test
 	public void createTodo() throws Exception {
-		Todo mockTodo = new Todo(CREATED_TODO_ID, "NameMock4", "DescMock4", "DateMock4", ItemStatus.PENDING);
+		Todo mockTodo = new Todo(CREATED_TODO_ID, "NameMock4", "DescMock4", LocalDate.now(), ItemStatus.PENDING);
 		String todo =  "{\r\n" + 
 				"	        \"id\": 4,\r\n" + 
 				"	        \"name\": \"NameMock4\",\r\n" + 
 				"	        \"description\": \"DescMock4\",\r\n" + 
-				"	        \"dueDate\": \"DateMock4\",\r\n" + 
+				"	        \"dueDate\": \""+LocalDate.now()+"\",\r\n" +
 				"	        \"status\": \"PENDING\"\r\n" + 
 				"	    }";
 
@@ -110,7 +111,7 @@ public class TestTodoAppController {
 				"	        \"id\": 4,\r\n" + 
 				"	        \"name\": \"\",\r\n" + 
 				"	        \"description\": \"DescMock4\",\r\n" + 
-				"	        \"dueDate\": \"DateMock4\",\r\n" + 
+				"	        \"dueDate\": "+LocalDate.now()+",\r\n" +
 				"	        \"status\": \"DONE\"\r\n" + 
 				"	    }";
 
@@ -120,15 +121,18 @@ public class TestTodoAppController {
 
 	@Test
 	public void updateTodo() throws Exception {
-		Todo mockTodo = new Todo(1, "NameMock4", "DescMock4", "DateMock4", ItemStatus.PENDING);
+		Todo mockTodo = new Todo(1, "NameMock4", "DescMock4", LocalDate.now(), ItemStatus.PENDING);
+		
 		String todo =  "{\r\n" + 
 				"	        \"id\": 1,\r\n" + 
 				"	        \"name\": \"NameMock4\",\r\n" + 
 				"	        \"description\": \"DescMock4\",\r\n" + 
-				"	        \"dueDate\": \"DateMock4\",\r\n" + 
+				"	        \"dueDate\":\""+LocalDate.now()+"\",\r\n" +
 				"	        \"status\": \"PENDING\"\r\n" + 
 				"	    }";
 
+		System.out.println("LocalDate.now()==="+LocalDate.now()+"mock todo="+todo);
+		
 		when(todoService.updateTodoItem(anyInt(),any())).thenReturn(mockTodo);
 
 		MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/app/api/todo/update/" + mockTodo.getId()).content(todo)
@@ -139,7 +143,7 @@ public class TestTodoAppController {
 
 	@Test
 	public void deleteTodo() throws Exception {
-		Todo mockTodo = new Todo(1,"Name1", "Description1", "DueDate1", ItemStatus.PENDING);
+		Todo mockTodo = new Todo(1,"Name1", "Description1", LocalDate.now(), ItemStatus.PENDING);
 		when(todoService.deleteItem(anyInt())).thenReturn(true);		
 		mvc.perform(MockMvcRequestBuilders.delete("/app/api/delete/" + mockTodo.getId())
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();			
@@ -147,7 +151,7 @@ public class TestTodoAppController {
 
 	@Test
 	public void deleteTodo_error() throws Exception {
-		Todo mockTodo = new Todo(55,"Name1", "Description1", "DueDate1", ItemStatus.PENDING);
+		Todo mockTodo = new Todo(55,"Name1", "Description1", LocalDate.now(), ItemStatus.PENDING);
 		when(todoService.deleteItem(anyInt())).thenReturn(false);
 		mvc.perform(MockMvcRequestBuilders.delete("/app/api/delete/"+ mockTodo.getId()).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound()).andReturn();		

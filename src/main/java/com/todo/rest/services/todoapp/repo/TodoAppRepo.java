@@ -1,6 +1,7 @@
 package com.todo.rest.services.todoapp.repo;
 
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +17,9 @@ public class TodoAppRepo {
 	private static HashMap<Integer, Todo> todo = new HashMap<Integer, Todo>();
 
 	static {
-		todo.put(1,new Todo(1,"Name1", "Description1", "DueDate1", ItemStatus.PENDING));
-		todo.put(2,new Todo(2,"Name2", "Description2", "DueDate2", ItemStatus.PENDING));
-		todo.put(3,new Todo(3,"Name3", "Description3", "DueDate3", ItemStatus.DONE));
+		todo.put(1,new Todo(1,"Name1", "Description1", LocalDate.now(), ItemStatus.PENDING));
+		todo.put(2,new Todo(2,"Name2", "Description2", LocalDate.now(), ItemStatus.PENDING));
+		todo.put(3,new Todo(3,"Name3", "Description3", LocalDate.now(), ItemStatus.DONE));
 	}
 
 	public List<Todo> getAllTodo() {
